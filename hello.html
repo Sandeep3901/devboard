@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Task Board</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6f9;
+      padding: 20px;
+    }
+
+    .header {
+      background: #1f2937;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      margin-bottom: 5px;
+    }
+
+    .board {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+    }
+
+    .column {
+      background: white;
+      border-radius: 10px;
+      width: 300px;
+      min-height: 400px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .column h2 {
+      margin-bottom: 15px;
+      color: #111827;
+      font-size: 20px;
+    }
+
+    .task {
+      background: #e5e7eb;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      cursor: grab;
+      transition: 0.2s;
+    }
+
+    .task:hover {
+      background: #d1d5db;
+    }
+
+    .task h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .task p {
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .column.drag-over {
+      background: #dbeafe;
+    }
+
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>Welcome to TaskFlow</h1>
+    <p>Manage your tasks and move them across stages.</p>
+  </div>
+
+  <div class="board">
+
+    <div class="column" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h2>To Do</h2>
+
+      <div class="task" draggable="true" ondragstart="drag(event)" id="task1">
+        <h3>Setup Server</h3>
+        <p>Install and configure nginx.</p>
+      </div>
+
+      <div class="task" draggable="true" ondragstart="drag(event)" id="task2">
+        <h3>Create Database</h3>
+        <p>Initialize MySQL database.</p>
+      </div>
+    </div>
+
+    <div class="column" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h2>In Progress</h2>
+
+      <div class="task" draggable="true" ondragstart="drag(event)" id="task3">
+        <h3>Frontend Design</h3>
+        <p>Design application UI.</p>
+      </div>
+    </div>
+
+    <div class="column" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h2>Testing</h2>
+    </div>
+
+    <div class="column" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h2>Done</h2>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Simple Jira-style Task Board
+  </div>
+
+  <script>
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
+    function drag(event) {
+      event.dataTransfer.setData("text", event.target.id);
+    }
+
+    function drop(event) {
+      event.preventDefault();
+
+      const taskId = event.dataTransfer.getData("text");
+      const task = document.getElementById(taskId);
+
+      let targetColumn = event.target;
+
+      while (!targetColumn.classList.contains("column")) {
+        targetColumn = targetColumn.parentElement;
+      }
+
+      targetColumn.appendChild(task);
+    }
+  </script>
+
+</body>
+</html>
